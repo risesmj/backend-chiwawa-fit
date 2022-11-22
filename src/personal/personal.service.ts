@@ -18,7 +18,7 @@ export class PersonalService {
     let res = await this.remote
       .client.
       from("student")
-      .select("profile_id,height, weight, profile!inner(name,gender,city,birth_date,phone)")
+      .select("profile_id,height, weight, profile!inner(name,gender,city,state,birth_date,phone)")
       .eq('personal_id', this.session?.user?.id);
 
     return res.data;
@@ -28,7 +28,7 @@ export class PersonalService {
     let res = await this.remote
       .client.
       from("student")
-      .select("profile_id,height, weight, profile!inner(name,gender,city,birth_date,phone)")
+      .select("profile_id,height, weight, profile!inner(name,gender,city,state,birth_date,phone)")
       .eq('personal_id', this.session?.user?.id)
       .eq('profile_id', id);
 
@@ -70,17 +70,5 @@ export class PersonalService {
     }
 
     throw new BadRequestException(res.error?.message)
-  }
-
-  updatePlan(
-    idStudent: string,
-    idTrainingPlan: string,
-    updatePlanDto: UpdatePlanDto
-  ) {
-    return ``;
-  }
-
-  removePlan(idStudent: string, idTrainingPlan: string) {
-    return ``;
   }
 }

@@ -26,7 +26,6 @@ export class AuthGuard implements CanActivate {
         if (res.data.user != null) {
             canContinue = true;
             this.session.user = res.data?.user;
-            console.log(this.session?.user?.id);
         } else {
             throw new UnauthorizedException();
         }

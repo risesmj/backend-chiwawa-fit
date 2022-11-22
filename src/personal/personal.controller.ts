@@ -29,31 +29,8 @@ export class PersonalController {
 
   @Post('my-students/:idStudent/training-plan')
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: "Retorna o plano de treino de um aluno específico conforme idStudent" })
+  @ApiOperation({ summary: "Cria o plano de treino de um aluno específico conforme idStudent" })
   createPlan(@Param('idStudent') idStudent: string, @Body() createPlanDto: CreatePlanDto) {
     return this.personalService.createPlan(idStudent, createPlanDto);
-  }
-
-
-  @Patch('my-students/:idStudent/training-plan/:idTrainingPlan')
-  @ApiOperation({ summary: "Atualiza o plano de treino de um aluno específico conforme idStudent e idTrainingPlan" })
-  @UseGuards(AuthGuard)
-  updatePlan(
-    @Param('idStudent') idStudent: string,
-    @Param('idTrainingPlan') idTrainingPlan: string,
-    @Body() updatePlanDto: UpdatePlanDto
-  ) {
-    return this.personalService.updatePlan(idStudent, idTrainingPlan, updatePlanDto);
-  }
-
-
-  @Delete('my-students/:idStudent/training-plan/:idTrainingPlan')
-  @ApiOperation({ summary: "Deleta o plano de treino de um aluno específico conforme idStudent e idTrainingPlan" })
-  @UseGuards(AuthGuard)
-  removePlan(
-    @Param('idStudent') idStudent: string,
-    @Param('idTrainingPlan') idTrainingPlan: string
-  ) {
-    return this.personalService.removePlan(idStudent, idTrainingPlan);
   }
 }

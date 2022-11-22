@@ -26,7 +26,7 @@ export class StudentService {
     if (resPersonalInfo.data != null && resPersonalInfo.data?.personal_id != null) {
       let res = await this.supabaseRemote.client
         .from("personal")
-        .select("profile_id,license, profile!inner(name,gender,city,birth_date,phone)")
+        .select("profile_id,license, profile!inner(name,gender,city,state,birth_date,phone)")
         .eq('profile_id', resPersonalInfo.data?.personal_id)
 
       return res.data;
