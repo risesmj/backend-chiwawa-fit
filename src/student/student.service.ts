@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { SupabaseRemote } from 'src/core/supabase-remote';
 
 @Injectable()
 export class StudentService {
+
+  constructor(private supabaseRemote: SupabaseRemote) { }
 
   fetchNewPersonal() {
     return '';
@@ -11,8 +14,9 @@ export class StudentService {
     return '';
   }
 
-  findAllTrainingPlan() {
-    return `This action returns all student`;
+  async findAllTrainingPlan() {
+    let teste = await this.supabaseRemote.client.from('training_plan').select()
+    console.log(teste);
   }
 
   findOneTrainingPlan(id: string) {

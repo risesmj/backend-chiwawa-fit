@@ -19,12 +19,12 @@ export class AuthController {
   @Post('signup/student')
   @ApiOperation({ summary: "Criar conta de aluno" })
   signUpStudent(@Body() signUpAuthDto: SignUpStudentDto) {
-    return this.authService.signUp(signUpAuthDto);
+    return this.authService.signUpStudent(signUpAuthDto);
   }
 
   @Post('signup/personal')
   @ApiOperation({ summary: "Criar conta de personal trainer" })
   signUpPersonal(@Body() signUpAuthDto: SignUpPersonalDto) {
-    return this.authService.signUp(signUpAuthDto);
+    return this.authService.signUpPersonal(signUpAuthDto);
   }
 }

@@ -1,12 +1,47 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { GenderChoices } from "../enum/gender-choices";
-import { SignUpProfile } from "./signup-profile";
 
-export class SignUpPersonalDto implements SignUpProfile {
+export class SignUpPersonalDto {
+    @ApiProperty({
+        example: "Julius",
+        required: true
+    })
     public name: string;
-    public gender: GenderChoices;
+
+    @ApiProperty({
+        example: "julius@gmail.com",
+        required: true
+    })
+    public email: string;
+
+    @ApiProperty({
+        example: "*******",
+        required: true
+    })
+    public password: string;
+
+    @ApiProperty({
+        example: "Itajaí",
+        required: true
+    })
     public city: string;
+
+    @ApiProperty({
+        example: "SC",
+        required: true
+    })
     public state: string;
+
+    @ApiProperty({
+        example: "47992283876",
+        required: true
+    })
     public phone: string;
-    public birth_date: string;
+
+    @ApiProperty({
+        example: "13783737773",
+        required: true
+    })
+    public license: string;
 
 }
