@@ -5,6 +5,7 @@ import { SupabaseRemote } from 'src/core/supabase-remote';
 import { CreateExercicieDto } from './dto/create-exercicie.dto';
 import { CreatePlanDto } from './dto/create-plan.dto';
 import { UpdatePlanDto } from './dto/update-plan.dto';
+import { RequestStatus } from './enum/request-status.enum';
 
 @Injectable()
 export class PersonalService {
@@ -33,6 +34,65 @@ export class PersonalService {
       .eq('profile_id', id);
 
     return res.data;
+  }
+
+  async findRequests() {
+    let res = await this.remote
+      .client.
+      from("request")
+      .select("id, created_at, status, student!inner(height, weight,profile!inner(name,gender,city,state,birth_date,phone))")
+      .eq('personal_id', this.session?.user?.id);
+
+    if (res.error?.message?.length > 0) {
+      throw new BadRequestException(res.error.message);
+    }
+
+    return res.data;
+  }
+
+  async acceptOrRejectRequest(id: string, status: string) {
+
+    if (status != RequestStatus.accepted && status != RequestStatus.rejected) {
+      throw new BadRequestException("O status deve ser accepted ou rejected");
+    }
+
+    //if accepted, update current personal on entity student
+    if (status == RequestStatus.accepted) {
+      let resStudent = await this.remote
+        .client.
+        from("request")
+        .select("student_id")
+        .eq('id', id)
+        .single();
+
+      if (resStudent.data != null) {
+        await this.remote.client
+          .from('student')
+          .update({
+            personal_id: this.session?.user?.id
+          })
+          .eq('profile_id', resStudent.data.student_id);
+      }
+
+      if (resStudent.error?.message?.length > 0) {
+        throw new BadRequestException(resStudent.error.message);
+      }
+    }
+
+    //update status on entity request
+    let res = await this.remote
+      .client.
+      from("request")
+      .update({
+        status: status
+      })
+      .eq('id', id);
+
+    if (res.error?.message?.length > 0) {
+      throw new BadRequestException(res.error.message);
+    }
+
+    return;
   }
 
   async createPlan(idStudent: string, createPlanDto: CreatePlanDto) {
