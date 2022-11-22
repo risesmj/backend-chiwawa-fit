@@ -21,7 +21,17 @@ export class AuthGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
         var canContinue = false;
 
-        let res = await this.remote.client.auth.getUser(request.headers["authorization"].replaceAll("Bearer", "").trim())
+        let token = request.headers["authorization"]?.replaceAll("Bearer", "")?.trim();
+
+        try {
+            if (token == null || token == undefined || token.length == 0) {
+                throw new UnauthorizedException();
+            }
+        } catch (_) {
+            throw new UnauthorizedException();
+        }
+
+        let res = await this.remote.client.auth.getUser(token)
 
         if (res.data.user != null) {
             canContinue = true;

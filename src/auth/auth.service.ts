@@ -33,8 +33,6 @@ export class AuthService {
   async signUpStudent(signUp: SignUpStudentDto) {
     var error = "";
 
-    console.log(signUp.password);
-
     //create user authentication
     let res = await this.remote.client.auth.signUp({ email: signUp.email, password: signUp.password })
 
