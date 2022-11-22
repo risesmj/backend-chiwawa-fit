@@ -1,5 +1,4 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { GenderChoices } from "../enum/gender-choices";
 
 export class SignUpPersonalDto {
     @ApiProperty({
