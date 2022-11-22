@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { StudentService } from './student.service';
@@ -13,6 +13,13 @@ export class StudentController {
   @ApiOperation({ summary: "Busca um personal trainer adequado para o usuário" })
   fetchNewPersonal() {
     return this.studentService.fetchNewPersonal();
+  }
+
+  @Post('request-personal')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: "Envia um solicitação para o personal escolhido" })
+  rquestNewPersonal(@Query('personal_id') personalId: string) {
+    return this.studentService.rquestNewPersonal(personalId);
   }
 
   @Get('my-personal')

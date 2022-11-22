@@ -1,4 +1,4 @@
-import { HttpException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Inject, Injectable } from '@nestjs/common';
 import { SessionCurrent } from 'src/core/session_current';
 import { SupabaseRemote } from 'src/core/supabase-remote';
 
@@ -10,8 +10,36 @@ export class StudentService {
     private session: SessionCurrent
   ) { }
 
-  fetchNewPersonal() {
-    return '';
+  async fetchNewPersonal() {
+    let res = await this.supabaseRemote.client
+      .from('personal')
+      .select('profile_id,profile!inner(name,gender,city,state,birth_date,phone)')
+
+    if (res.error?.message?.length > 0) {
+      throw new BadRequestException(res.error?.message);
+    }
+
+    if (res.data?.length > 0) {
+      let index = res.data?.length == 1 ? 0 : Math.floor(Math.random() * (res.data.length));
+      return res.data[index];
+    }
+
+    return
+  }
+
+  async rquestNewPersonal(personalId: string) {
+    let res = await this.supabaseRemote.client
+      .from('request')
+      .insert({
+        student_id: this.session?.user?.id,
+        personal_id: personalId
+      })
+
+    if (res.error?.message?.length > 0) {
+      throw new BadRequestException(res.error?.message)
+    }
+
+    return;
   }
 
   async findMyPersonal() {
