@@ -56,6 +56,17 @@ export class PersonalService {
       throw new BadRequestException("O status deve ser accepted ou rejected");
     }
 
+    let requestCurrent = await this.remote.client
+      .from('request')
+      .select()
+      .eq('id', id)
+      .neq('status', 'pending')
+      .single()
+
+    if (requestCurrent.data != null) {
+      throw new BadRequestException("Esta solicitação já foi respondida.");
+    }
+
     //if accepted, update current personal on entity student
     if (status == RequestStatus.accepted) {
       let resStudent = await this.remote
