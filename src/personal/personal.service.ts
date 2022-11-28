@@ -41,7 +41,8 @@ export class PersonalService {
       .client.
       from("request")
       .select("id, created_at, status, student!inner(height, weight,profile!inner(name,gender,city,state,birth_date,phone))")
-      .eq('personal_id', this.session?.user?.id);
+      .eq('personal_id', this.session?.user?.id)
+      .eq('status', RequestStatus.pending);
 
     if (res.error?.message?.length > 0) {
       throw new BadRequestException(res.error.message);
