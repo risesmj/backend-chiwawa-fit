@@ -28,6 +28,21 @@ export class StudentService {
   }
 
   async rquestNewPersonal(personalId: string) {
+    let exists = await this.supabaseRemote.client
+      .from('request')
+      .select()
+      .eq("student_id", this.session?.user?.id)
+      .eq("status", "pending")
+      .single()
+
+    if (await this.findMyPersonal() != null) {
+      throw new BadRequestException("Você já possui um personal trainer.")
+    }
+
+    if (exists.data != null) {
+      throw new BadRequestException("Já existe uma solicitação pendente de personal, por favor aguarde o retorno.")
+    }
+
     let res = await this.supabaseRemote.client
       .from('request')
       .insert({
@@ -60,7 +75,7 @@ export class StudentService {
       return res.data;
     }
 
-    return ''
+    return null
   }
 
   async findAllTrainingPlan() {
